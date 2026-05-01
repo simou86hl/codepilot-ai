@@ -147,57 +147,65 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
             </div>
           </div>
 
-          {/* API Key - Only show for non-Z AI providers */}
-          {!isZAI && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <Label className="text-sm font-semibold">مفتاح API</Label>
-                {selectedProvider && (
-                  <a
-                    href={
-                      selectedProvider.id === "openrouter"
-                        ? "https://openrouter.ai/keys"
-                        : selectedProvider.id === "deepseek"
-                        ? "https://platform.deepseek.com/api_keys"
-                        : selectedProvider.id === "groq"
-                        ? "https://console.groq.com/keys"
-                        : "#"
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-primary flex items-center gap-1 hover:underline"
-                  >
-                    احصل على مفتاح <ExternalLink className="h-3 w-3" />
-                  </a>
-                )}
-              </div>
-              <div className="relative">
-                <Input
-                  type={showKey ? "text" : "password"}
-                  value={providerConfig.apiKey}
-                  onChange={(e) => setProviderConfig({ apiKey: e.target.value })}
-                  placeholder={`أدخل مفتاح ${selectedProvider?.name || "API"}...`}
-                  className="font-mono text-sm pr-10"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute left-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                  onClick={() => setShowKey(!showKey)}
+          {/* API Key */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-semibold">
+                مفتاح API {isZAI && <span className="text-muted-foreground font-normal">(اختياري)</span>}
+              </Label>
+              {selectedProvider && (
+                <a
+                  href={
+                    selectedProvider.id === "zai"
+                      ? "https://open.bigmodel.cn"
+                      : selectedProvider.id === "openrouter"
+                      ? "https://openrouter.ai/keys"
+                      : selectedProvider.id === "deepseek"
+                      ? "https://platform.deepseek.com/api_keys"
+                      : selectedProvider.id === "groq"
+                      ? "https://console.groq.com/keys"
+                      : "#"
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-primary flex items-center gap-1 hover:underline"
                 >
-                  {showKey ? (
-                    <EyeOff className="h-4 w-4 text-muted-foreground" />
-                  ) : (
-                    <Eye className="h-4 w-4 text-muted-foreground" />
-                  )}
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                يتم حفظ المفتاح محلياً في المتصفح فقط ولا يُرسل إلى أي خادم خارجي
-                غير مزود النموذج المختار.
-              </p>
+                  احصل على مفتاح <ExternalLink className="h-3 w-3" />
+                </a>
+              )}
             </div>
-          )}
+            <div className="relative">
+              <Input
+                type={showKey ? "text" : "password"}
+                value={providerConfig.apiKey}
+                onChange={(e) => setProviderConfig({ apiKey: e.target.value })}
+                placeholder={
+                  isZAI
+                    ? "أدخل مفتاح Zhipu AI (اختياري)..."
+                    : `أدخل مفتاح ${selectedProvider?.name || "API"}...`
+                }
+                className="font-mono text-sm pr-10"
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute left-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                onClick={() => setShowKey(!showKey)}
+              >
+                {showKey ? (
+                  <EyeOff className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <Eye className="h-4 w-4 text-muted-foreground" />
+                )}
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {isZAI
+                ? "يعمل تلقائياً في بيئة التطوير. للنشر الخارجي، أضف مفتاح Zhipu AI المجاني."
+                : "يُحفظ المفتاح محلياً في المتصفح فقط ولا يُرسل إلى أي خادم خارجي."
+              }
+            </p>
+          </div>
 
           {/* Z AI Info Card */}
           {isZAI && (
@@ -207,13 +215,22 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
                   <Shield className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold">Z AI - مدمج مباشرة</h3>
-                  <p className="text-[10px] text-muted-foreground">لا يحتاج مفتاح API</p>
+                  <h3 className="text-sm font-semibold">Z AI / Zhipu AI</h3>
+                  <p className="text-[10px] text-muted-foreground">GLM-4 نماذج ذكية</p>
                 </div>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                نماذج GLM مدمجة مباشرة في التطبيق ومتاحة فوراً بدون أي إعداد إضافي.
-                ما عليك سوى اختيار النموذج والبدء في المحادثة.
+                نماذج GLM تعمل تلقائياً في بيئة التطوير بدون مفتاح. للنشر على Vercel أو أي خادم خارجي،
+                احصل على مفتاح مجاني من{" "}
+                <a
+                  href="https://open.bigmodel.cn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  open.bigmodel.cn
+                </a>{" "}
+                وأضفه في الحقل أعلاه.
               </p>
             </div>
           )}

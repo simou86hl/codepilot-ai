@@ -6,7 +6,7 @@ export const PROVIDERS: Provider[] = [
     name: "Z AI",
     icon: "🤖",
     baseUrl: "",
-    needsApiKey: false,
+    needsApiKey: false, // Optional - works without key in dev environment, needs Zhipu AI key for external deployment
     apiKeyEnvVar: "",
     protocol: "zai",
     models: [

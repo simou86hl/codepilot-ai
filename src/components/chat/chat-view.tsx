@@ -105,6 +105,8 @@ export function ChatView({ onOpenSettings }: ChatViewProps) {
         userMessage,
       ];
 
+      const isZAI = providerConfig.provider === "zai";
+
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -116,20 +118,56 @@ export function ChatView({ onOpenSettings }: ChatViewProps) {
           provider: providerConfig.provider,
           model: providerConfig.model,
           apiKey: providerConfig.apiKey,
-          stream: true,
+          stream: !isZAI,
         }),
         signal: abortRef.current.signal,
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        let errorMsg = "حدث خطأ غير متوقع";
+        try {
+          const text = await response.text();
+          if (text) {
+            try {
+              const errorData = JSON.parse(text);
+              errorMsg = errorData.error || errorMsg;
+            } catch {
+              errorMsg = text.slice(0, 200);
+            }
+          }
+        } catch {
+          // response body unreadable
+        }
         updateLastAssistantMessage(
           sessionId,
-          `❌ **خطأ:** ${errorData.error || "حدث خطأ غير متوقع"}`
+          `❌ **خطأ:** ${errorMsg}`
         );
         return;
       }
 
+      // Z AI returns JSON directly - simulate typing effect on frontend
+      if (isZAI) {
+        let data: any;
+        try {
+          data = await response.json();
+        } catch {
+          updateLastAssistantMessage(sessionId, "❌ استجابة غير صالحة من Z AI");
+          return;
+        }
+
+        const fullContent = data?.content || "لا يوجد رد";
+        // Simulate word-by-word typing effect
+        const words = fullContent.split(/(\s+)/);
+        let displayed = "";
+        for (let i = 0; i < words.length; i++) {
+          displayed += words[i];
+          updateLastAssistantMessage(sessionId, displayed);
+          await new Promise((r) => setTimeout(r, 20));
+        }
+        return;
+      }
+
+      // Other providers: real SSE streaming
       const reader = response.body?.getReader();
       if (!reader) {
         updateLastAssistantMessage(sessionId, "❌ لا يمكن قراءة الاستجابة");
@@ -167,14 +205,9 @@ export function ChatView({ onOpenSettings }: ChatViewProps) {
       }
     } catch (err: unknown) {
       if (err instanceof Error && err.name !== "AbortError") {
-        const isZAI = providerConfig.provider === "zai";
         updateLastAssistantMessage(
           sessionId,
-          isZAI
-            ? `❌ حدث خطأ أثناء الاتصال بـ Z AI. حاول مرة أخرى.\n\
-(التفاصيل: ${err.message})`
-            : `❌ حدث خطأ في الاتصال. تأكد من صحة مفتاح API في الإعدادات.\n\
-(التفاصيل: ${err.message})`
+          `❌ حدث خطأ: ${err.message}`
         );
       }
     } finally {
@@ -362,6 +395,11 @@ export function ChatView({ onOpenSettings }: ChatViewProps) {
           {!providerConfig.apiKey && providerConfig.provider !== "zai" && (
             <div className="mb-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-600 dark:text-amber-400">
               ⚠️ يرجى إضافة مفتاح API من صفحة الإعدادات لبدء المحادثة
+            </div>
+          )}
+          {providerConfig.provider === "zai" && !providerConfig.apiKey && (
+            <div className="mb-2 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-600 dark:text-emerald-400">
+              ✅ Z AI يعمل تلقائياً في بيئة التطوير - بدون حاجة لمفتاح
             </div>
           )}
           <div className="flex items-end gap-2">
