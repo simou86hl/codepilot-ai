@@ -83,7 +83,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {isProviderZAI
-                          ? "مدمج مباشرة - لا يحتاج مفتاح API"
+                          ? "نماذج GLM من Zhipu AI - احصل على مفتاح مجاني"
                           : `${provider.models.filter((m) => m.isFree).length} نماذج مجانية`}
                       </p>
                     </div>
@@ -151,7 +151,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="text-sm font-semibold">
-                مفتاح API {isZAI && <span className="text-muted-foreground font-normal">(اختياري)</span>}
+                مفتاح API
               </Label>
               {selectedProvider && (
                 <a
@@ -180,9 +180,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
                 value={providerConfig.apiKey}
                 onChange={(e) => setProviderConfig({ apiKey: e.target.value })}
                 placeholder={
-                  isZAI
-                    ? "أدخل مفتاح Zhipu AI (اختياري)..."
-                    : `أدخل مفتاح ${selectedProvider?.name || "API"}...`
+                  `أدخل مفتاح ${isZAI ? "Zhipu AI" : selectedProvider?.name || "API"}...`
                 }
                 className="font-mono text-sm pr-10"
               />
@@ -200,40 +198,11 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
               </Button>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              {isZAI
-                ? "يعمل تلقائياً في بيئة التطوير. للنشر الخارجي، أضف مفتاح Zhipu AI المجاني."
-                : "يُحفظ المفتاح محلياً في المتصفح فقط ولا يُرسل إلى أي خادم خارجي."
-              }
+              يُحفظ المفتاح محلياً في المتصفح فقط ولا يُرسل إلى أي خادم خارجي.
             </p>
           </div>
 
-          {/* Z AI Info Card */}
-          {isZAI && (
-            <div className="rounded-xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 p-4 space-y-3">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                  <Shield className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold">Z AI / Zhipu AI</h3>
-                  <p className="text-[10px] text-muted-foreground">GLM-4 نماذج ذكية</p>
-                </div>
-              </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                نماذج GLM تعمل تلقائياً في بيئة التطوير بدون مفتاح. للنشر على Vercel أو أي خادم خارجي،
-                احصل على مفتاح مجاني من{" "}
-                <a
-                  href="https://open.bigmodel.cn"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  open.bigmodel.cn
-                </a>{" "}
-                وأضفه في الحقل أعلاه.
-              </p>
-            </div>
-          )}
+
 
           {/* Tips */}
           <div className="rounded-xl bg-muted/50 p-4 space-y-2">

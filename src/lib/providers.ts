@@ -6,8 +6,8 @@ export const PROVIDERS: Provider[] = [
     name: "Z AI",
     icon: "🤖",
     baseUrl: "",
-    needsApiKey: false, // Optional - works without key in dev environment, needs Zhipu AI key for external deployment
-    apiKeyEnvVar: "",
+    needsApiKey: true,
+    apiKeyEnvVar: "ZHIPU_API_KEY",
     protocol: "zai",
     models: [
       { id: "glm-4-plus", name: "GLM-4 Plus", isFree: true, description: "نموذج GLM المتقدم - الأقوى للبرمجة" },
