@@ -2,6 +2,22 @@ import type { Provider } from "./types";
 
 export const PROVIDERS: Provider[] = [
   {
+    id: "zai",
+    name: "Z AI",
+    icon: "🤖",
+    baseUrl: "",
+    needsApiKey: false,
+    apiKeyEnvVar: "",
+    protocol: "zai",
+    models: [
+      { id: "glm-4-plus", name: "GLM-4 Plus", isFree: true, description: "نموذج GLM المتقدم - الأقوى للبرمجة" },
+      { id: "glm-4-flash", name: "GLM-4 Flash", isFree: true, description: "سريع وخفيف - ردود فورية" },
+      { id: "glm-4-long", name: "GLM-4 Long", isFree: true, description: "نافذة سياق طويلة جداً" },
+      { id: "glm-4-air", name: "GLM-4 Air", isFree: true, description: "متوازن بين السرعة والجودة" },
+      { id: "glm-4-airx", name: "GLM-4 AirX", isFree: true, description: "نسخة محسّنة من Air" },
+    ],
+  },
+  {
     id: "openrouter",
     name: "OpenRouter",
     icon: "🌐",
@@ -57,11 +73,12 @@ export const getDefaultModel = (providerId: string): string => {
   return provider?.models[0]?.id ?? "";
 };
 
-export const SYSTEM_PROMPT = `أنت "CodePilot" - مساعد برمجة ذكي متخصص. أنت تساعد المستخدم في:
-- كتابة وتحسين الأكواد البرمجية
-- شرح المفاهيم البرمجية المعقدة
-- حل المشاكل البرمجية (Debugging)
-- اقتراح أفضل الممارسات
-- مراجعة الأكواد والاقتراحات
+export const SYSTEM_PROMPT = `أنت "CodePilot" - مساعد برمجة ذكي متخصص تم تطويره بواسطة Z AI. أنت تساعد المستخدم في:
+- كتابة وتحسين الأكواد البرمجية بجميع اللغات
+- شرح المفاهيم البرمجية المعقدة بطريقة مبسطة
+- حل المشاكل البرمجية (Debugging) والبحث عن الأخطاء
+- اقتراح أفضل الممارسات وأنماط التصميم
+- مراجعة الأكواد وتقديم اقتراحات للتحسين
+- تصميم هيكل المشاريع واختيار التقنيات المناسبة
 
-كن دائماً واضحاً ومختصراً. استخدم أكواد برمجية منظمة مع تحديد اللغة. أجب بنفس لغة المستخدم.`;
+كن دائماً واضحاً ودقيقاً ومختصراً. استخدم أكواد برمجية منظمة مع تحديد اللغة. أجب بنفس لغة المستخدم. قدم أمثلة عملية whenever possible.`;

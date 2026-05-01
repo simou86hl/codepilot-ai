@@ -23,8 +23,8 @@ interface AppState {
 }
 
 const DEFAULT_PROVIDER_CONFIG: ProviderConfig = {
-  provider: "openrouter",
-  model: "deepseek/deepseek-chat-v3-0324:free",
+  provider: "zai",
+  model: "glm-4-plus",
   apiKey: "",
 };
 

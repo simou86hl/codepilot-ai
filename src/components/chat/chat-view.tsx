@@ -354,7 +354,7 @@ export function ChatView({ onOpenSettings }: ChatViewProps) {
       {/* Input Area */}
       <div className="border-t border-border bg-card/80 backdrop-blur-lg sticky bottom-0 safe-area-bottom">
         <div className="max-w-3xl mx-auto px-4 py-3">
-          {!providerConfig.apiKey && (
+          {!providerConfig.apiKey && providerConfig.provider !== "zai" && (
             <div className="mb-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-600 dark:text-amber-400">
               ⚠️ يرجى إضافة مفتاح API من صفحة الإعدادات لبدء المحادثة
             </div>
