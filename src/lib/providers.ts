@@ -32,6 +32,9 @@ export const PROVIDERS: Provider[] = [
       { id: "meta-llama/llama-4-maverick:free", name: "Llama 4 Maverick", isFree: true, description: "أحدث نموذج من Meta" },
       { id: "qwen/qwen3-235b-a22b:free", name: "Qwen3 235B", isFree: true, description: "نموذج ضخم من Alibaba" },
       { id: "microsoft/phi-4-reasoning-plus:free", name: "Phi-4 Reasoning+", isFree: true, description: "نموذج تفكير من Microsoft" },
+      { id: "zhipu/glm-4-flash", name: "GLM-4 Flash", isFree: false, description: "سريع وخفيف من Zhipu" },
+      { id: "zhipu/glm-4-plus", name: "GLM-4 Plus", isFree: false, description: "نموذج GLM المتقدم" },
+      { id: "zhipu/glm-4-air", name: "GLM-4 Air", isFree: false, description: "متوازن بين السرعة والجودة" },
     ],
   },
   {
