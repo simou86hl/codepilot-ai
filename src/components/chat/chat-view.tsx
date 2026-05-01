@@ -167,9 +167,14 @@ export function ChatView({ onOpenSettings }: ChatViewProps) {
       }
     } catch (err: unknown) {
       if (err instanceof Error && err.name !== "AbortError") {
+        const isZAI = providerConfig.provider === "zai";
         updateLastAssistantMessage(
           sessionId,
-          "❌ حدث خطأ في الاتصال. تأكد من إعدادات مفتاح API."
+          isZAI
+            ? `❌ حدث خطأ أثناء الاتصال بـ Z AI. حاول مرة أخرى.\n\
+(التفاصيل: ${err.message})`
+            : `❌ حدث خطأ في الاتصال. تأكد من صحة مفتاح API في الإعدادات.\n\
+(التفاصيل: ${err.message})`
         );
       }
     } finally {

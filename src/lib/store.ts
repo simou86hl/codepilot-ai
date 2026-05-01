@@ -112,6 +112,21 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "codepilot-storage",
+      version: 2,
+      migrate: (persistedState: unknown, version: number) => {
+        const state = persistedState as AppState;
+        // Migration v1 -> v2: Switch default provider to Z AI
+        if (version < 2) {
+          if (state.providerConfig && state.providerConfig.provider === "openrouter") {
+            state.providerConfig = {
+              provider: "zai",
+              model: "glm-4-plus",
+              apiKey: "",
+            };
+          }
+        }
+        return state;
+      },
     }
   )
 );
